@@ -107,5 +107,21 @@ def run_simulation(commands, cycles_per_command=3, dt=0.05):
       heading_line.set_data([], [])
       left_leg_line.set_data([], [])
       right_leg_line.set_data([], [])
-      return body_point
+      return body_point, heading_line, left_leg_line, right_leg_line
+
+    def update(i):
+      x = xs[i]; y = ys[i]
+      feet = feet_list[i]
+      body_point.set_data(x, y)
+      if i < len(xs)-1:
+        dx = xs[i+1]-x; dy = ys[i+1]-y
+        theta = np.arctan2(dy, dx)
+      else: 
+        theta = 0.0
+      hx = [x, x + 0.04 * np.cos(theta)]
+      hy = [y, y + 0.4 * np.sin(theta)]
+      heading_line.set_data(hx, hy)
+      c, s = np.cos(theta), np.sin(theta)
+      R = np.array([[c, -s],[s, c]])
+      hips = np.array
       
