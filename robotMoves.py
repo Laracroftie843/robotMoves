@@ -76,4 +76,36 @@ def get_draw_state(self):
   feet = [leg..foot for leg in self.legs]
   return (self.x, self.y, self.theta, feet)
 
+# Visualization
+def run_simulation(commands, cycles_per_command=3, dt=0.05):
+  robot = SimpleLeggedRobot()
+  dur_per_cmd = cycles_per_command * robot.cycle_time
+  timeline =[]
+  for cmd in commands:
+    timeline.extend([cmd] * int(np.round(dur_per_cmd / dt)))
 
+
+    xs, yx, feet_list = [], [], []
+    for step_cmd in timeline:
+      robot.step(dt, step_cmd)
+      x,y, theta, feet = robot.get_draw_state()
+      xs.append(x); ys.append(y); feet_list.append(np.array(feet))
+
+    fig, ax = plt.subplots(figsize=(6,6))
+    ax.set_aspect('equal', 'box')
+    ax.set_xlim(min(xs)-1, max(xs)=1)
+    ax.set_ylim(min(ys)-1, max(ys)+1)
+    ax.set_title("Simple Legged Robot Simulation")
+
+    body_point, = ax.plot([]. [], marker='o', markersize=12)
+    heading_line, = ax.plot([]. [], linewidth=2)
+    left_leg_line, = ax.plot([], [], linewidth=3)
+    right_leg_line, = ax.plot([], [], linewidth=3)
+
+    def init():
+      body_point.set_data([], [])
+      heading_line.set_data([], [])
+      left_leg_line.set_data([], [])
+      right_leg_line.set_data([], [])
+      return body_point
+      
